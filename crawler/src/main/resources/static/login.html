@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PiracyGuard | Authentication</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { background: radial-gradient(circle at top left, #1e293b, #0f172a); font-family: 'Inter', sans-serif; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="glass w-full max-w-md p-10">
+        <div class="text-center mb-8">
+            <h1 class="font-['Syne'] text-3xl font-bold">PiracyGuard<span class="text-indigo-500">.</span></h1>
+            <p id="form-subtitle" class="text-slate-400 text-sm mt-2">Sign in to your forensic vault</p>
+        </div>
+
+        <form id="loginForm" class="space-y-4">
+            <input type="email" id="loginEmail" placeholder="Email" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-indigo-500">
+            <input type="password" id="loginPass" placeholder="Password" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-indigo-500">
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-bold transition-all">Sign In</button>
+            <p class="text-center text-xs text-slate-500">Don't have an account? <a href="#" onclick="toggleForm()" class="text-indigo-400">Sign Up</a></p>
+        </form>
+
+        <form id="registerForm" class="space-y-4 hidden">
+            <input type="text" id="regName" placeholder="Full Name" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-indigo-500">
+            <input type="email" id="regEmail" placeholder="Email" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-indigo-500">
+            <input type="password" id="regPass" placeholder="Create Password" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-indigo-500">
+            <button type="submit" class="w-full border border-indigo-600 text-indigo-400 hover:bg-indigo-600 hover:text-white py-3 rounded-xl font-bold transition-all">Create Account</button>
+            <p class="text-center text-xs text-slate-500">Already a member? <a href="#" onclick="toggleForm()" class="text-indigo-400">Sign In</a></p>
+        </form>
+    </div>
+
+    <script>
+        function toggleForm() {
+            document.getElementById('loginForm').classList.toggle('hidden');
+            document.getElementById('registerForm').classList.toggle('hidden');
+            const sub = document.getElementById('form-subtitle');
+            sub.innerText = sub.innerText.includes('vault') ? 'Create your researcher profile' : 'Sign in to your forensic vault';
+        }
+
+        
+        async function authRequest(endpoint, payload) {
+            const response = await fetch(`http://localhost:8080/api/auth/${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('userToken', data.token); 
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Authentication Failed: Invalid credentials or server error.');
+            }
+        }
+
+        document.getElementById('loginForm').onsubmit = (e) => {
+            e.preventDefault();
+            authRequest('login', { email: loginEmail.value, password: loginPass.value });
+        };
+
+        document.getElementById('registerForm').onsubmit = (e) => {
+            e.preventDefault();
+            authRequest('register', { fullName: regName.value, email: regEmail.value, password: regPass.value });
+        };
+    </script>
+</body>
+</html>

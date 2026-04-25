@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PiracyGuard | Media Vault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0b0f1a; font-family: 'Inter', sans-serif; color: #cbd5e1; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; }
+        .main-content { margin-left: 260px; padding: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar glass h-screen w-64 fixed left-0 top-0 p-6 border-r border-white/5">
+            <div class="logo font-['Syne'] text-2xl font-bold mb-10 text-white">Piracy<span class="text-indigo-500">Guard</span></div>
+            <ul class="space-y-4">
+                <li><a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📊 Dashboard</a></li>
+                <li><a href="Media.html" class="flex items-center gap-3 p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium">📁 Media Vault</a></li>
+                <li><a href="Upload.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📤 Forensic Upload</a></li>
+                <li><a href="alerts.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚠️ Alerts</a></li>
+                <li><a href="Settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚙️ Settings</a></li>
+            </ul>
+            <div class="absolute bottom-10 w-full left-0 px-6">
+                <button onclick="logout()" class="text-xs text-slate-500 hover:text-white flex items-center gap-2">🚪 Logout</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+    <header class="mb-10">
+        <h1 class="text-3xl font-bold text-white font-['Syne']">Forensic Validator</h1>
+        <p class="text-slate-500 text-sm">Direct algorithm comparison between two media assets</p>
+    </header>
+
+    <div class="glass p-8 max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            
+            <div class="space-y-4">
+                <label class="text-[10px] uppercase tracking-widest text-indigo-400 font-bold">Source: Official Media</label>
+                <div class="border-2 border-dashed border-slate-800 rounded-2xl p-10 text-center hover:border-indigo-500/40 transition-all cursor-pointer bg-white/5" onclick="document.getElementById('officialFile').click()">
+                    <input type="file" id="officialFile" class="hidden">
+                    <div class="text-2xl mb-2">📄</div>
+                    <p id="officialLabel" class="text-xs text-slate-400">Select official file</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <label class="text-[10px] uppercase tracking-widest text-red-400 font-bold">Source: Suspect Media</label>
+                <div class="border-2 border-dashed border-slate-800 rounded-2xl p-10 text-center hover:border-red-500/40 transition-all cursor-pointer bg-white/5" onclick="document.getElementById('suspectFile').click()">
+                    <input type="file" id="suspectFile" class="hidden">
+                    <div class="text-2xl mb-2">🕵️</div>
+                    <p id="suspectLabel" class="text-xs text-slate-400">Select suspect file</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="runComparison()" class="w-full bg-indigo-600 py-4 rounded-xl font-bold text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all uppercase tracking-widest text-sm">
+            Execute Comparison Algorithm
+        </button>
+
+        <div id="resultPanel" class="mt-8 hidden border-t border-white/5 pt-8">
+            <h4 class="text-xs font-bold text-slate-500 uppercase mb-4">Algorithm Analysis Output</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass p-4 text-center">
+                    <p class="text-[10px] text-slate-500 uppercase">Confidence</p>
+                    <p id="resConfidence" class="text-2xl font-bold text-white">--</p>
+                </div>
+                <div class="glass p-4 text-center">
+                    <p class="text-[10px] text-slate-500 uppercase">Hamming Distance</p>
+                    <p id="resDistance" class="text-2xl font-bold text-indigo-400">--</p>
+                </div>
+                <div class="glass p-4 text-center">
+                    <p class="text-[10px] text-slate-500 uppercase">Status</p>
+                    <p id="resPirated" class="text-sm font-bold mt-2">--</p>
+                </div>
+            </div>
+            
+            <div class="mt-4 glass p-4 font-mono text-[10px] space-y-2">
+            <p class="text-slate-500">Official Hash: <span id="resOfficialHash" class="text-indigo-300"></span></p>
+            <p class="text-slate-500">Suspect Hash: <span id="resSuspectHash" class="text-red-300"></span></p>
+            <p class="text-indigo-400 font-bold" id="resAction"></p>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

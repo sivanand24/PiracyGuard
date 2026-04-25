@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PiracyGuard | Forensic Vault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0b0f1a; font-family: 'Inter', sans-serif; color: #cbd5e1; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; }
+        .sidebar { width: 260px; border-right: 1px solid rgba(255,255,255,0.05); position: fixed; height: 100vh; }
+        .main-content { margin-left: 260px; padding: 40px; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar p-6 flex flex-col justify-between">
+        <div>
+            <h2 class="font-['Syne'] text-2xl font-bold text-white mb-10">Piracy<span class="text-indigo-500">Guard</span></h2>
+            <nav class="space-y-2">
+                <a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📊 Dashboard</a>
+                <a href="Upload.html" class="flex items-center gap-3 p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium">📤 Forensic Upload</a>
+                <a href="media.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📁 Media Vault</a>
+                <a href="alerts.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚠️ Alerts</a></li>
+                <a href="Settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚙️ Settings</a></li>
+            </nav>
+        </div>
+        <button onclick="logout()" class="text-xs text-slate-600 hover:text-white mb-4">Logout</button>
+    </aside>
+
+    <main class="main-content">
+        <header class="mb-10">
+            <h1 class="text-3xl font-bold text-white font-['Syne'] tracking-tight">Forensic Ingestion</h1>
+            <p class="text-slate-500">Secure your intellectual property with pHash and invisible watermarking.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="glass p-8 space-y-6 border-t-4 border-indigo-500/30">
+                <div class="flex items-center gap-3">
+                    <span class="p-2 bg-indigo-500/10 rounded-lg">🛡️</span>
+                    <h3 class="text-lg font-bold text-white">Protect New Media</h3>
+                </div>
+                <p class="text-xs text-slate-500">This will apply an invisible watermark and store the pHash in NeonDB.</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[10px] uppercase font-bold text-slate-600 ml-1">Owner Identity (Email)</label>
+                        <input type="email" id="ownerEmail" placeholder="creator@example.com" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 outline-none">
+                    </div>
+                    <div id="dropZoneProtect" class="border-2 border-dashed border-slate-800 rounded-2xl p-10 text-center hover:border-indigo-500/50 transition-all cursor-pointer">
+                        <input type="file" id="fileProtect" class="hidden">
+                        <p class="text-sm text-slate-400">Drag file or <span class="text-indigo-400 underline" onclick="document.getElementById('fileProtect').click()">browse</span></p>
+                    </div>
+                    <button onclick="handleUpload('protect')" class="w-full bg-indigo-600 py-3 rounded-xl font-bold text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all">Apply Watermark & Save</button>
+                    
+                </div>
+                <div id="protectResult" class="text-xs font-mono p-3 rounded bg-black/20 hidden"></div>
+            </div>
+
+            <div class="glass p-8 space-y-6 border-t-4 border-emerald-500/30">
+                <div class="flex items-center gap-3">
+                    <span class="p-2 bg-emerald-500/10 rounded-lg">🔍</span>
+                    <h3 class="text-lg font-bold text-white">Verify Suspicious File</h3>
+                </div>
+                <p class="text-xs text-slate-500">Upload media to check if it exists in the copyright vault.</p>
+                
+                <div class="space-y-4">
+                    <div id="dropZoneVerify" class="border-2 border-dashed border-slate-800 rounded-2xl p-10 text-center hover:border-emerald-500/50 transition-all cursor-pointer mt-7">
+                        <input type="file" id="fileVerify" class="hidden">
+                        <p class="text-sm text-slate-400">Drag suspect file or <span class="text-emerald-400 underline" onclick="document.getElementById('fileVerify').click()">browse</span></p>
+                    </div>
+                    <button onclick="handleUpload('verify')" class="w-full bg-transparent border border-emerald-500/50 text-emerald-400 py-3 rounded-xl font-bold hover:bg-emerald-500 hover:text-white transition-all">Run Forensic Check</button>
+                </div>
+                <div id="verifyResult" class="text-xs font-mono p-4 rounded-xl bg-black/40 border border-white/5 hidden"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PiracyGuard - Secure Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 text-slate-200">
+    <div class="glass-card w-full max-w-md p-10 relative overflow-hidden">
+        <div class="text-center mb-8">
+            <h1 class="font-['Syne'] text-4xl font-bold tracking-tight mb-2">PiracyGuard<span class="text-indigo-500">.</span></h1>
+            <p class="text-slate-400 text-sm">AI Forensic Suite Access</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Identifier</label>
+                <input type="text" id="user" required 
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all outline-none" 
+                    placeholder="Enter Username">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Security Key</label>
+                <input type="password" id="pass" required 
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all outline-none" 
+                    placeholder="••••••••">
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-bold transition-all transform active:scale-95 shadow-xl shadow-indigo-600/20">
+                Launch Dashboard
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            localStorage.setItem('auth', 'true');
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/resources/static/upload.css">
+    <link rel="stylesheet" href="/resources/static/Upload.css">
+</head>
+<body>
+    <div class="container">
+
+        
+        <aside class="sidebar glass h-screen w-64 fixed left-0 top-0 p-6 border-r border-white/5">
+    <div class="logo font-['Syne'] text-2xl font-bold mb-10">Piracy<span class="text-indigo-500">Guard</span></div>
+    
+    <ul class="space-y-4">
+        <li><a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📊 Dashboard</a></li>
+        <li><a href="Media.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📁 Media</a></li>
+        <li><a href="Upload.html" class="flex items-center gap-3 p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium">📤 Upload</a></li>
+        <li><a href="alerts.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚠️ Alerts</a></li>
+        <li><a href="Settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚙️ Settings</a></li>
+    </ul>
+
+    <div class="absolute bottom-10 w-full left-0 px-6">
+        <button onclick="logout()" class="text-xs text-slate-500 hover:text-white flex items-center gap-2">🚪 Logout</button>
+    </div>
+</aside>
+
+       
+        <main class="main">
+
+            <!--topbar-->
+            <div class="topbar">
+                <input type="text" placeholder="search">
+                <button class="login-button">log in</button>
+            </div>
+
+                <!-- Upload Box -->
+                    <div class="upload-card" id="uploadBox">
+                        <h3>Drag & Drop</h3>
+                        <p>or browse files</p>
+
+                        <input type="file" id="fileInput" hidden>
+
+                        <button class="browse-button" onclick="fileInput.click()">Browse</button>
+
+                        <!-- TEMP preview -->
+                        <div id="tempPreview"></div>
+                    </div>
+
+                    <div class="uploaded-file">
+                        <h4>Uploaded Files</h4>
+                        <div id="fileList"></div>
+                    </div>
+
+           
+
+                    <div class="analysis-section  upload-card">
+                        <h2>AI Detection & Protection</h2>
+
+                        <!-- Tabs -->
+                        <div class="tabs">
+                            <button class="tab active" onclick="switchTab('detect',this)">Detection</button>
+                            <button class="tab" onclick="switchTab('watermark',this)">Watermark</button>
+                        </div>
+
+                        <!-- DETECTION -->
+                        <div id="panel-detect" class="panel active">
+                            <h3>Select Files from Uploads</h3>
+
+                            <select id="originalSelect"></select>
+                            <select id="pirateSelect"></select>
+
+                            <button onclick="runDetection()">Run Detection</button>
+
+                            <div id="detect-result"></div>
+                        </div>
+
+                        <!-- WATERMARK -->
+                        <div id="panel-watermark" class="panel">
+                            <h3>Apply Watermark</h3>
+
+                            <select id="watermarkSelect"></select>
+
+                            <button onclick="runWatermark()">Apply</button>
+
+                            <div id="wm-result"></div>
+                        </div>
+                    </div>
+
+
+        </main>
+
+        <script src="/resources/static/upload.js"></script>
+        <script src="/resources/static/app.js"></script>
+</body>
+</html>
+
+async function handleUpload(action) {
+    console.log("Starting action:", action);
+
+    const fileInput = action === 'protect' ? document.getElementById('fileProtect') : document.getElementById('fileVerify');
+    const emailInput = document.getElementById('ownerEmail');
+
+    if (!fileInput || !fileInput.files[0]) {
+        alert("Please select a file first!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]); // Must match Java @RequestParam("file")
+
+    let endpoint = 'http://localhost:8080/upload/files';
+    let method = 'POST';
+
+    if (action === 'protect') {
+        if (!emailInput.value) return alert("Email required for watermarking!");
+        formData.append('ownerEmail', emailInput.value); // Must match Java @RequestParam("ownerEmail")
+    } else {
+        endpoint += '/verify-video'; // Becomes http://localhost:8080/upload/verify-video
+        // CRITICAL: Change your Java code from @GetMapping to @PostMapping for verify-video
+    }
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: formData
+        });
+
+        const resultText = await response.text();
+        const display = action === 'protect' ? document.getElementById('protectResult') : document.getElementById('verifyResult');
+        
+        display.classList.remove('hidden');
+        display.innerText = resultText;
+        console.log("Server Response:", resultText);
+
+    } catch (error) {
+        console.error("Network or Server Error:", error);
+        alert("Cannot connect to Java backend.");
+    }
+}
+const official = document.getElementById('officialFile').files[0];
+    const suspect = document.getElementById('suspectFile').files[0];
+    const panel = document.getElementById('resultPanel');
+
+    if (!official || !suspect) return alert("Both Official and Suspect files are required.");
+
+    const formData = new FormData();
+    formData.append('official', official);
+    formData.append('suspect', suspect);
+
+    panel.classList.remove('hidden');
+    document.getElementById('resConfidence').innerText = "CALC...";
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+    dashbaord.html 
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PiracyGuard | AI Control Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+    </style>
+</head>
+
+<body class="bg-[#0b0f1a] text-slate-300 font-['Inter'] min-h-screen">
+    <nav class="p-6 border-b border-white/5 flex justify-between items-center">
+        <h2 class="font-['Syne'] text-xl font-bold">PiracyGuard<span class="text-indigo-500">.</span></h2>
+        <div class="flex gap-4">
+            <span class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20">Backend Live</span>
+            <button onclick="localStorage.clear(); location.href='login.html'" class="text-xs text-slate-500 hover:text-white">Logout</button>
+        </div>
+    </nav>
+    <ul class="space-y-4">
+        <li><a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📊 Dashboard</a></li>
+        <li><a href="Media.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📁 Media</a></li>
+        <li><a href="Upload.html" class="flex items-center gap-3 p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium">📤 Upload</a></li>
+        <li><a href="alerts.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚠️ Alerts</a></li>
+        <li><a href="Settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚙️ Settings</a></li>
+    </ul>
+
+    <main class="p-8 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <section class="md:col-span-2 space-y-6">
+
+        <div class="grid grid-cols-3 gap-6">
+
+    <div class="col-span-2 space-y-6">
+
+        <div class="glass-panel p-6">
+            <h3 class="text-sm font-bold uppercase text-indigo-400 mb-4">Crawler Queue</h3>
+            
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <p class="text-xs text-slate-400">Queue Size</p>
+                    <p id="queueSize" class="text-2xl font-bold text-white">0</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400">Processing</p>
+                    <p id="processingCount" class="text-2xl font-bold text-yellow-400">0</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400">Completed</p>
+                    <p id="completedCount" class="text-2xl font-bold text-emerald-400">0</p>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="glass-panel p-6">
+            <h3 class="text-lg font-bold text-white mb-3">Start Global Crawl</h3>
+            <p class="text-sm text-slate-500 mb-4">Scan internet for pirated media</p>
+
+            <button onclick="startCrawler()" 
+                class="bg-indigo-600 px-6 py-2 rounded-lg font-semibold">
+                ▶ Start Crawl
+            </button>
+        </div>
+
+    </div>
+
+    <div class="col-span-1">
+
+        <div class="glass-panel p-6 h-full">
+            <h2 class="text-lg font-semibold mb-2">Live Logs</h2>
+            <div id="logs" class="text-sm h-[300px] overflow-y-auto">
+                Waiting for crawler...
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+         <div class="glass-panel p-6">
+            <h3 class="text-sm font-bold text-indigo-400 mb-4">Queue Activity</h3>
+            <canvas id="chart"></canvas>
+        </div>
+
+    </section>
+
+    <aside class="space-y-6">
+        <div class="glass-panel p-6">
+            <h3 class="text-xs font-bold uppercase text-slate-500 mb-4">Live Logs</h3>
+            <div id="logs" class="space-y-2 text-[11px] font-mono h-64 overflow-y-auto">
+                <div class="text-slate-500">Waiting for crawler...</div>
+            </div>
+        </div>
+    </aside>
+
+</main>
+    
+
+    <script>
+        async function fetchQueueSize() {
+            try {
+                const res = await fetch("http://localhost:8080/api/crawler/queue-size");
+                const size = await res.json();
+                document.getElementById("queueSize").innerText = size;
+            } catch (e) {
+                console.log("Queue API not available");
+            }
+        }
+    setInterval(fetchQueueSize, 2000);
+
+
+async function startCrawler() {
+    await fetch("http://localhost:8080/api/crawler/start", {
+        method: "POST"
+    });
+}
+
+let socket = new SockJS("http://localhost:8080/ws-crawler");
+let stompClient = Stomp.over(socket);
+
+stompClient.connect({}, function () {
+    stompClient.subscribe("/topic/logs", function (msg) {
+        const log = JSON.parse(msg.body);
+        showLog(log);
+    });
+});
+
+function showLog(log) {
+    const logBox = document.getElementById("logs");
+
+    const div = document.createElement("div");
+    div.innerHTML = `[${log.time}] ${log.message}`;
+
+    if (log.level === "ERROR") div.style.color = "red";
+    if (log.level === "SUCCESS") div.style.color = "lightgreen";
+    if (log.level === "WARN") div.style.color = "orange";
+
+    logBox.appendChild(div);
+    logBox.scrollTop = logBox.scrollHeight;
+}
+        
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>

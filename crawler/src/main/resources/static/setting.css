@@ -1,0 +1,137 @@
+body {
+  background: #f0eaea;
+  color: white;
+  font-family: Arial;
+}
+
+.settings {
+  padding: 20px;
+  max-width: 900px;
+}
+
+/* CARD */
+.card {
+  background: #f0eaea;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+/* PROFILE */
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  background: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* FORM */
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+}
+
+/* BUTTON */
+.btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #6366f1, #9333ea);
+}
+
+/* TOGGLE SWITCH */
+.switch {
+  position: relative;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  display: none;
+}
+
+.switch span {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #475569;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.switch span::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: 0.3s;
+}
+
+.switch input:checked + span {
+  background: #3b82f6;
+}
+
+.switch input:checked + span::before {
+  transform: translateX(20px);
+}
+
+/* TOGGLE ROW */
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* PROGRESS BAR */
+.progress {
+  background: #334155;
+  height: 8px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.progress-bar {
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #9333ea);
+  border-radius: 10px;
+}
+
+/* SECURITY */
+.security-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #334155;
+  cursor: pointer;
+}

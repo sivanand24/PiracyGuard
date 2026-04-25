@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/front-end/style/setting.css">
+    <link rel="stylesheet" href="/front-end/style/style.css">
+</head>
+<body>
+    <div class="container">
+
+        <!--sidebar-->
+        <aside class="sidebar">
+            <div class="logo">
+                DEMO
+            </div>
+            
+            <ul class="menu">
+                <a href="dashboard.html"><li>Dashboard</li></a>
+                <a href="Media.html"><li>Media</li></a>
+                <a href="Upload.html"><li>Upload</li></a>
+                
+                <a href="Alerts.html"><li>Alerts</li></a>
+                <a href="Setting.html"><li class="active">Settings</li></a>
+
+            </ul>
+
+        </aside>
+
+        <!--main-->
+        <main class="main">
+
+            <!--topbar-->
+            <div class="topbar">
+                <input type="text" placeholder="search">
+                <button class="login-button">log in</button>
+            </div>
+
+            <div class="settings">
+
+  <h1>Settings</h1>
+  <p class="subtitle">Manage your account and preferences</p>
+
+  <!-- PROFILE -->
+  <div class="card profile">
+    <h3>Profile</h3>
+
+    <div class="profile-top">
+      <div class="avatar">MSK</div>
+      <div>
+        <h4>MSK</h4>
+        <p>MSK@mediashield.io</p>
+      </div>
+    </div>
+
+    <div class="form">
+      <input type="text" value="MSK">
+      <input type="email" value="MSK@mediashield.io">
+      <input type="text" value="Sports Media Inc.">
+      <input type="text" value="Admin">
+    </div>
+
+    <button class="btn">Save Changes</button>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div class="card">
+    <h3>Notifications</h3>
+
+    <div class="toggle-row">
+      <div>
+        <h4>Email Notifications</h4>
+        <p>Receive alerts via email</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <h4>Push Notifications</h4>
+        <p>Browser push notifications</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <h4>SMS Alerts</h4>
+      </div>
+      <label class="switch">
+        <input type="checkbox">
+        <span></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- STORAGE -->
+  <div class="card">
+    <h3>Storage & Usage</h3>
+    <p>42.8 GB used</p>
+
+    <div class="progress">
+      <div class="progress-bar"></div>
+    </div>
+
+    <button class="btn gradient">Upgrade Plan</button>
+  </div>
+
+  <!-- SECURITY -->
+  <div class="card">
+    <h3>Security</h3>
+
+    <div class="security-item">Change Password →</div>
+    <div class="security-item">Two-Factor Authentication →</div>
+    <div class="security-item">API Keys →</div>
+    <div class="security-item">Active Sessions →</div>
+  </div>
+
+</div>
+        </main>
+
+        
+</body>
+</html>

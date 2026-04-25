@@ -1,0 +1,160 @@
+.upload{
+    padding: 20px;
+}
+
+.upload h3 {
+    border: none;
+    
+}
+
+.upload p {
+    border: none;
+    font-size: 15px;
+}
+
+.upload-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    grid-column: span 4;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.upload-card h3 {
+    padding-top: 80px;
+    margin: 0;
+}
+
+.upload-card p{
+    font-size: 14px;
+}
+
+.browse-button {
+    background-color: rgb(60, 186, 249);
+    border: none;
+    border-radius: 7px;
+    color: white;
+    padding: 5px;
+    font-weight: 700;
+}
+
+.uploaded-file {
+    padding: 20px;
+}
+
+.up-list {
+    background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(12px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 12px;
+    margin: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.up-list h5 {
+    margin: 0;
+    font-size: 13px;
+    padding: 10px;
+}
+
+.up-list p {
+    margin: 0;
+    padding: 0 10px;
+    font-size: 10px;
+}
+
+
+/* File Card */
+.up-list {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+/* Preview */
+.preview {
+    margin-top: 10px;
+    max-width: 200px;
+    border-radius: 10px;
+}
+
+/* Progress Bar */
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #1A73E8;
+    transition: width 0.3s;
+}
+
+#tempPreview {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.preview {
+    max-width: 200px;
+    border-radius: 10px;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 6px;
+    background: #1A73E8;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+.analysis-section {
+    margin-top: 30px;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 8px 16px;
+   
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: rgb(13, 23, 29);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 6px;
+    font-weight: 700;
+}
+
+.tab.active {
+     background-color: rgb(60, 186, 249);
+    color: white;
+}
+
+.panel {
+    display: none;
+}
+
+.panel.active {
+    display: block;
+}
