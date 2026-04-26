@@ -1,14 +1,12 @@
 package com.sportsDetect.crawler.controller;
 
 
-import com.sportsDetect.crawler.model.CrawlResult;
-import com.sportsDetect.crawler.model.DetectionLog;
+
 import com.sportsDetect.crawler.model.Media;
-import com.sportsDetect.crawler.repository.CrawlerResultRepository;
-import com.sportsDetect.crawler.repository.DetectionLogRepository;
 import com.sportsDetect.crawler.repository.MediaRepository;
-import com.sportsDetect.crawler.service.AutomatedService;
-import com.sportsDetect.crawler.service.RedisQueueService;
+
+import com.sportsDetect.crawler.service.DiscoveryService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,32 +15,29 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/crawler")
+@RequestMapping("/api/")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class CrawlerController {
-    @Autowired
-    private AutomatedService automatedService;
-
-    @Autowired
-    private RedisQueueService redisQueueService;
 
     @Autowired
     private MediaRepository mediaRepository;
 
     @Autowired
-    private DetectionLogRepository detectionLogRepository;
+    private DiscoveryService discoveryService;
 
-    @Autowired
-    private CrawlerResultRepository crawlerResultRepository;
 
+    @GetMapping("/search")
+    public ResponseEntity<List<String>> search(@RequestParam String query) {
+        try {
+            List<String> results = discoveryService.findViolations(query, "illegal-streaming-site.com");
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
     /*@PostMapping("/start")
-    public String runCrawler() throws InterruptedException {
-        automatedService.executeHunt();
-        return "Crawler Started";
-    }*/
-    @PostMapping("/start")
-    public ResponseEntity<?> runCrawler(@RequestBody Map<String, String> payload) {
-        String query = payload.get("query");
+    public ResponseEntity<?> runCrawler(@RequestBody(required = false) CrawlerRequest request) {
+        String query = (request != null) ? request.getQuery() : null;
         if (query != null) {
             automatedService.startDynamicCrawl(query);
             return ResponseEntity.ok("Search hunt started for: " + query);
@@ -53,8 +48,10 @@ public class CrawlerController {
     }
 
     @GetMapping("/queue-size")
-    public Long getQueueSize(){
-         return redisQueueService.size();
+    public ResponseEntity<Long> getQueueSize(){
+        long size = redisQueueService.size();
+        System.out.println("DEBUG: Backend is reporting queue size as: " + size);
+        return ResponseEntity.ok(redisQueueService.size());
     }
 
     @GetMapping("/results")
@@ -66,5 +63,5 @@ public class CrawlerController {
     public List<DetectionLog> getDetections() {
         return detectionLogRepository.findAll();
     }
-
+*/
 }

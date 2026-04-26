@@ -1,11 +1,10 @@
 package com.sportsDetect.crawler.service;
 
+/*
 import com.sportsDetect.crawler.engine.AISimilarityEngine;
 import com.sportsDetect.crawler.engine.Validator;
 import com.sportsDetect.crawler.engine.WebScout;
-import com.sportsDetect.crawler.model.DetectionLog;
 import com.sportsDetect.crawler.model.Media;
-import com.sportsDetect.crawler.repository.DetectionLogRepository;
 import com.sportsDetect.crawler.utils.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,6 @@ public class MediaService {
     @Autowired
     private HashUtil hashUtil;
 
-    @Autowired
-     private DetectionLogRepository logRepository;
 
 
     private boolean isAMatch(String officialHash, String foundHash) {
@@ -114,6 +111,8 @@ public class MediaService {
     }
 
 }
+
+     */
 
 
 

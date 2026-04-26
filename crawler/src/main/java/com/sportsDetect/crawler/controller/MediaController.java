@@ -1,5 +1,6 @@
 package com.sportsDetect.crawler.controller;
 
+import com.sportsDetect.crawler.service.VideoService;
 import com.sportsDetect.crawler.utils.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ public class MediaController {
 
     @Autowired
     private HashUtil hashUtil;
+
+    @Autowired
+    private VideoService videoService;
 
     @PostMapping("/compare")
     public ResponseEntity<Map<String, Object>> compareImages(
@@ -45,6 +49,33 @@ public class MediaController {
             Map<String, Object> error = new HashMap<>();
             error.put("error", e.getMessage());
             return ResponseEntity.internalServerError().body(error);
+        }
+    }
+
+    @PostMapping("/compare-video")
+    public ResponseEntity<Map<String, Object>> compareVideos(
+            @RequestParam("official") MultipartFile officialVideo,
+            @RequestParam("suspect") MultipartFile suspectVideo) {
+
+
+        if (officialVideo == null || officialVideo.isEmpty() || suspectVideo == null || suspectVideo.isEmpty()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Both 'official' and 'suspect' files are required.");
+            return ResponseEntity.badRequest().body(error);
+        }
+
+        try {
+            VideoService.VideoComparisonResult result = videoService.compareVideos(officialVideo, suspectVideo);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("confidenceScore", String.format("%.2f%%", result.matchPercentage));
+            response.put("distance", result.averageDistance); // Now this works with Integer!
+            response.put("riskLevel", result.matchPercentage > 80 ? "CRITICAL" : "LOW_RISK");
+            response.put("actionRecommended", result.matchPercentage > 80 ? "AUTO-TAKEDOWN" : "MANUAL_REVIEW");
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
 

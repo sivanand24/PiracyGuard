@@ -1,6 +1,6 @@
 package com.sportsDetect.crawler.model;
 
-import jakarta.persistence.Entity;
+/*import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
@@ -54,3 +54,4 @@ public class CrawlResult {
         this.status = status;
     }
 }
+ */

@@ -1,7 +1,7 @@
 package com.sportsDetect.crawler.config;
 
 
-import org.springframework.context.annotation.Configuration;
+/*import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
@@ -21,4 +21,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("http://127.0.0.1:5500")
                 .withSockJS();
     }
-}
+}*/

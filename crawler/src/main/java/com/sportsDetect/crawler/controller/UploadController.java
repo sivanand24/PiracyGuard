@@ -56,22 +56,20 @@ public class UploadController {
             Files.write(tempPath, file.getBytes());
 
             List<String> hashList ;
-            String finalPathToHash;
+
+            String combinedHash;
 
             if(file.getContentType().startsWith("video")){
                 hashList = videoService.processVideo(tempPath.toString(),fingerprintID);
-                finalPathToHash = tempPath.toString();
+                combinedHash = String.join(",", hashList);
             }
             else {
                 byte[] watermarked = WatermarkUtil.applyInvisibleWatermark(file.getBytes(),fingerprintID);
-                finalPathToHash= "output/image.png";
-                Files.write(Path.of(finalPathToHash), watermarked);
-                hashList = Collections.singletonList(finalPathToHash);
+                String imagePath = "output/image_" + System.currentTimeMillis() + ".png";
+                Files.write(Path.of(imagePath), watermarked);
+
+                combinedHash = HashUtil.generatePHash(watermarked);
             }
-            byte[] finalBytes = Files.readAllBytes(Path.of(finalPathToHash));
-            String hash = HashUtil.generatePHash(finalBytes);
-            List<String> hashes = videoService.processVideo(tempPath.toString(),fingerprintID);
-            String combinedHash = String.join(",",hashList);
 
             Media media = new Media();
             media.setOwnerEmail(ownerEmail);

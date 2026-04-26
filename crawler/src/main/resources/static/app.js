@@ -1,149 +1,57 @@
-const API_URL = "http://localhost:8080/api/auth";
-
-const socket = new SockJS("http://localhost:8080/ws-crawler");
-const stompClient = Stomp.over(socket);
-
-stompClient.connect({}, function () {
-
-    stompClient.subscribe("/topic/logs", function (msg) {
-
-        const log = JSON.parse(msg.body);
-        addLogToUI(log);
-
-    });
-
-});
-async function fetchQueueSize() {
-    try {
-        const res = await fetch(`${BASE_URL}/api/dashboard/queue-size`);
-        const size = await res.json();
-        const el = document.getElementById("queueSize");
-        if (el) el.innerText = size;
-    } catch (e) {
-        console.warn("Queue API not reachable");
-    }
-}
-
-async function startCrawler() {
-    const logs = document.getElementById("logs");
-    if(logs) logs.innerHTML = "Starting crawler...\n";
-    
-    try {
-        await fetch(`${BASE_URL}/api/crawler/start`, { method: "POST" });
-    } catch (err) {
-        console.error("Crawler start failed", err);
-    }
-}
-
-async function startSearch() {
+const BASE_URL = "http://localhost:8080";
+async function performSearch() {
     const query = document.getElementById("searchInput").value;
-    if (!query) return alert("Enter a search term");
-    
-    await fetch("http://localhost:8080/api/crawler/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: query })
-    });
-}
+    const resultsDiv = document.getElementById("results");
+    const resultsWrapper = document.getElementById("resultsWrapper");
 
-function showLog(log) {
-    const logBox = document.getElementById("logs");
-    if (!logBox) return; 
+    if (!query) return alert("Please enter a search term.");
 
-    const div = document.createElement("div");
-    div.innerHTML = `[${log.time}] <b>${log.level}</b>: ${log.message}`;
+    resultsDiv.innerHTML = "<li>Searching indices...</li>";
+    resultsWrapper.classList.remove("hidden");
 
-    if (log.level === "ERROR") div.style.color = "#ef4444";
-    else if (log.level === "SUCCESS") div.style.color = "#10b981";
-    else if (log.level === "WARN") div.style.color = "#f59e0b";
-
-    logBox.appendChild(div);
-    logBox.scrollTop = logBox.scrollHeight;
-}
-async function updateQueue() {
     try {
-        const res = await fetch("http://localhost:8080/api/dashboard/queue-size");
-        const size = await res.json();
+        const response = await fetch(`http://localhost:8080/api/search?query=${encodeURIComponent(query)}`);
+        
+        if (!response.ok) throw new Error("Search failed");
+        
+        const data = await response.json(); 
 
-        document.getElementById("queueSize").innerText = size;
-    } catch (e) {
-        console.log("Queue API error");
+        if (data.length === 0) {
+            resultsDiv.innerHTML = "<li class='text-slate-500'>No results found.</li>";
+            return;
+        }
+
+        resultsDiv.innerHTML = data.map(url => `
+            <li class="bg-white/5 p-3 rounded-lg border border-white/5">
+                <a href="${url}" target="_blank" class="text-indigo-400 hover:text-white break-all">${url}</a>
+            </li>
+        `).join('');
+
+    } catch (err) {
+        resultsDiv.innerHTML = "<li class='text-red-400'>Error connecting to server.</li>";
     }
 }
-
-setInterval(updateQueue, 2000);
-async function startCrawler() {
-    await fetch("http://localhost:8080/api/crawler/start", {
-        method: "POST"
-    });
-}
-
 async function loadDetections() {
-    const res = await fetch("http://localhost:8080/api/dashboard/detections");
-    const data = await res.json();
-
     const container = document.getElementById("resultsTable");
-    container.innerHTML = "";
+    if (!container) return; 
 
-    data.forEach(d => {
-        container.innerHTML += `
+    try {
+        const res = await fetch("http://localhost:8080/api/dashboard/detections");
+        if (!res.ok) throw new Error("API not found");
+        const data = await res.json();
+        
+        container.innerHTML = data.map(d => `
             <div style="margin-bottom:10px;">
                 <p>${d.link}</p>
                 <small>Similarity: ${(1 - d.similarity) * 100}%</small>
             </div>
-        `;
-    });
-}
-
-setInterval(loadDetections, 4000);
-const ctx = document.getElementById("chart");
-
-const chart = new Chart(ctx, {
-    type: "line",
-    data: {
-        labels: [],
-        datasets: [
-            { label: "Queue", data: [] },
-        ]
+        `).join('');
+    } catch (e) {
+        
+        container.innerHTML = '<p class="text-xs text-slate-500">No detections available.</p>';
     }
-});
-
-async function updateChart() {
-    const res = await fetch("/api/dashboard/queue-size");
-    const size = await res.json();
-
-    const time = new Date().toLocaleTimeString();
-
-    chart.data.labels.push(time);
-    chart.data.datasets[0].data.push(size);
-
-    chart.update();
 }
 
-setInterval(updateChart, 2000);
-function showLog(log) {
-    if (!logBox) {
-        console.error("Critical Error: Element with id='logs' not found in the DOM!");
-        return; 
-    }
-    const logBox = document.getElementById("logs");
-
-    const div = document.createElement("div");
-
-    div.innerHTML = `[${log.time}] <b>${log.level}</b>: ${log.message}`;
-
-    
-    if (log.level === "ERROR") div.style.color = "red";
-    else if (log.level === "SUCCESS") div.style.color = "lightgreen";
-    else if (log.level === "WARN") div.style.color = "orange";
-
-    logBox.appendChild(div);
-    logBox.scrollTop = logBox.scrollHeight;
-}
-stompClient.subscribe("/topic/logs", function (message) {
-    const log = JSON.parse(message.body);
-    showLog(log);
-});
 
 async function runComparison() {
     const official = document.getElementById('officialFile').files[0];
@@ -154,6 +62,9 @@ async function runComparison() {
         return alert("Both Official and Suspect files are required.");
     }
 
+    const isVideo = official.type.includes("video") || suspect.type.includes("video");
+    
+    const endpoint = isVideo ? '/api/validate/compare-video' : '/api/validate/compare';
     const formData = new FormData();
     formData.append('official', official);
     formData.append('suspect', suspect);
@@ -161,17 +72,22 @@ async function runComparison() {
     if (panel) panel.classList.remove('hidden');
     document.getElementById('resConfidence').innerText = "CALC...";
     try {
-        const response = await fetch('http://localhost:8080/api/validate/compare', {
+        const response = await fetch(`http://localhost:8080${endpoint}`, {
             method: 'POST',
             body: formData
         });
-
         const data = await response.json();
         console.log("Full Backend Response:", data);
+        if (!response.ok) {
+            console.error("Server Error:", data.error || "Unknown error");
+            alert("Analysis failed: " + (data.error || "Check backend logs"));
+            return; 
+        }
+        
+        document.getElementById('resConfidence').innerText = data.confidenceScore || data.matchScore || "0%";
 
-        document.getElementById('resConfidence').innerText = data.confidenceScore;
-        document.getElementById('resDistance').innerText = data.distance;
-    
+        document.getElementById('resDistance').innerText = (data.distance !== undefined && data.distance !== null) ? data.distance : "N/A";
+        
         document.getElementById('resOfficialHash').innerText = data.officialHash || "Not Generated";
         document.getElementById('resSuspectHash').innerText = data.suspectHash || "Not Generated";
 
@@ -193,26 +109,6 @@ async function runComparison() {
         alert("Algorithm Error: Check console for details.");
     }
 }
-async function startCrawler() {
-    const logs = document.getElementById("logs");
-    logs.innerHTML = "Starting crawler...\n";
-
-    try {
-        const res = await fetch("http://localhost:8080/api/crawler/run");
-        const text = await res.text();
-
-        logs.innerHTML += text;
-
-        setTimeout(() => {
-            document.getElementById("results").innerHTML =
-                "<li>https://pirate-site.com/sample1.jpg</li>";
-        }, 2000);
-
-    } catch (err) {
-        logs.innerHTML += "Error: " + err;
-    }
-}
-
 async function handleUpload(action) {
     const protectResult = document.getElementById('protectResult');
     const verifyResult = document.getElementById('verifyResult');
@@ -256,7 +152,8 @@ async function handleUpload(action) {
         try {
             
             const response = await fetch(`http://localhost:8080/upload/verify-video`, {
-                method: 'POST', 
+                method: 'POST',
+                body: formData 
             });
             const text = await response.text();
             verifyResult.innerText = text;
@@ -443,23 +340,20 @@ function updateUI(id, value) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById("queueSize")) {
-        setInterval(fetchQueueSize, 2000);
-    }
 
-    try {
-        const socket = new SockJS(`${BASE_URL}/ws-crawler`);
-        const stompClient = Stomp.over(socket);
-        stompClient.connect({}, function () {
-            stompClient.subscribe("/topic/logs", function (msg) {
-                showLog(JSON.parse(msg.body));
-            });
-        });
-    } catch (e) {
-        console.error("WebSocket connection failed");
-    }
-});
+document.addEventListener("DOMContentLoaded", () => {
+    const currentPage = window.location.pathname.split("/").pop();
+
+    const navLinks = document.querySelectorAll('aside ul li a');
+
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+            link.className = "flex items-center gap-3 p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium";
+        } else {
+            link.className = "flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400";
+        }
+    });
+})
     
 
     

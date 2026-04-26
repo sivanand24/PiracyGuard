@@ -1,6 +1,6 @@
 package com.sportsDetect.crawler.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+/*import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +13,9 @@ public class RedisQueueService {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    public void push(String link) {
+    public void push(String data) {
         try {
-            redisTemplate.opsForList().rightPush(QUEUE_NAME, link);
+            redisTemplate.opsForList().rightPush(QUEUE_NAME, data);
         } catch (Exception e){
         }
     }
@@ -36,4 +36,4 @@ public class RedisQueueService {
             return null;
         }
     }
-}
+}*/

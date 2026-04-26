@@ -1,6 +1,6 @@
 package com.sportsDetect.crawler.model;
 
-
+/*
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -99,3 +99,4 @@ public class DetectionLog {
     }
 
 }
+ */

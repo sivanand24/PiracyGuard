@@ -1,5 +1,6 @@
 package com.sportsDetect.crawler.service;
 
+/*
 import com.sportsDetect.crawler.model.Media;
 import com.sportsDetect.crawler.repository.CrawlerResultRepository;
 import com.sportsDetect.crawler.repository.MediaRepository;
@@ -111,3 +112,4 @@ public class WorkerService {
         return null;
     }
 }
+ */

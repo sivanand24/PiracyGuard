@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PiracyGuard | AI Control Center</title>
+    <title>PiracyGuard | Intelligence Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -20,98 +18,40 @@
         <div>
             <div class="logo font-['Syne'] text-2xl font-bold mb-10 text-white">Piracy<span class="text-indigo-500">Guard</span></div>
             <ul class="space-y-4">
-                <li><a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium">📊 Dashboard</a></li>
-                <li><a href="Media.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📁 Media</a></li>
-                <li><a href="Upload.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📤 Upload</a></li>
-                <li><a href="alerts.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚠️ Alerts</a></li>
+                <li><a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📊 Dashboard</a></li>
+
+                <li><a href="Media.html" class="flex items-center gap-3 p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-medium">📁 Media Vault</a></li>
+                <li><a href="Upload.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">📤 Forensic Upload</a></li>
                 <li><a href="Settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all text-slate-400">⚙️ Settings</a></li>
             </ul>
         </div>
-        <button onclick="localStorage.clear(); location.href='login.html'" class="text-xs text-slate-500 hover:text-white text-left">🚪 Logout</button>
+        <button onclick="localStorage.clear(); location.href='login.html'" class="text-xs text-slate-500 hover:text-white">🚪 Logout</button>
     </aside>
 
     <main class="flex-1 overflow-y-auto p-8">
-        
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-bold text-white font-['Syne']">AI Control Center</h1>
-            <span class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20">Backend Live</span>
+        <header class="mb-8">
+            <h1 class="text-2xl font-bold text-white font-['Syne']">Discovery Engine</h1>
+            <p class="text-slate-500 text-sm">Targeted intelligence for sports piracy monitoring.</p>
         </header>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"></div>
-            <div class="lg:col-span-2 space-y-6">
+
+        <div class="max-w-3xl mx-auto"> 
             <div class="glass-panel p-6">
-            <h3 class="text-xs font-bold uppercase text-indigo-400 mb-4">Crawler Queue</h3>
-        <div class="grid grid-cols-3 gap-4 text-center">
-            <div><p class="text-[10px] text-slate-400">Queue Size</p><p id="queueSize" class="text-3xl font-bold text-white">0</p></div>
-            <div><p class="text-[10px] text-slate-400">Processing</p><p id="processingCount" class="text-3xl font-bold text-yellow-400">0</p></div>
-            <div><p class="text-[10px] text-slate-400">Completed</p><p id="completedCount" class="text-3xl font-bold text-emerald-400">0</p></div>
-        </div>
-    </div>
+                <h3 class="text-xs font-bold uppercase text-indigo-400 mb-4">Find New Piracy Links</h3>
+                <div class="flex gap-3">
+                    <input id="searchInput" class="bg-white/5 border border-white/10 rounded-lg p-3 text-white flex-1 focus:outline-none focus:border-indigo-500" placeholder="Enter event name (e.g., Lakers vs Bulls)...">
+                    <button onclick="performSearch()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                        Search
+                    </button>
+                </div>
+            </div>
 
-    <div class="glass-panel p-6">
-        <h3 class="text-lg font-bold text-white mb-1">Start Global Crawl</h3>
-        <p class="text-xs text-slate-500 mb-6">Initiate automated scan for pirated content</p>
-        
-        <input id="searchInput" placeholder="Enter media title..." />
-        <button onclick="startSearch()">Search</button>
-        <div class="flex justify-center">
-            <button onclick="startCrawler()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-indigo-600/20">
-                ▶ Start Crawl
-            </button>
+            <div id="resultsWrapper" class="mt-6 glass-panel p-6 hidden">
+                <h3 class="text-xs font-bold uppercase text-emerald-400 mb-4">Discovery Results</h3>
+                <ul id="results" class="space-y-3"></ul>
+            </div>
         </div>
-    </div>
-
-    <div class="glass-panel p-6">
-        <h3 class="text-xs font-bold text-indigo-400 mb-4">Queue Activity</h3>
-        <canvas id="chart" class="w-full h-40"></canvas>
-    </div>
-</div>
-
-<div class="lg:col-span-1">
-    <div class="glass-panel p-6 h-full flex flex-col">
-        <h3 class="text-xs font-bold uppercase text-slate-500 mb-4">Live Logs</h3>
-        
-        <div id="logs" class="text-[11px] font-mono h-[300px] overflow-y-auto space-y-2 flex-grow">
-            <div class="text-slate-500">Waiting for crawler...</div>
-        </div>
-        
-    </div>
-</div>
     </main>
 
-    <script>
-        async function fetchQueueSize() {
-            try {
-                const res = await fetch("http://localhost:8080/api/crawler/queue-size");
-                const size = await res.json();
-                document.getElementById("queueSize").innerText = size;
-            } catch (e) { console.log("Queue API not available"); }
-        }
-        setInterval(fetchQueueSize, 2000);
-
-        async function startCrawler() {
-            await fetch("http://localhost:8080/api/crawler/start", { method: "POST" });
-        }
-
-        let socket = new SockJS("http://localhost:8080/ws-crawler");
-        let stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, function () {
-            stompClient.subscribe("/topic/logs", function (msg) {
-                const log = JSON.parse(msg.body);
-                showLog(log);
-            });
-        });
-
-        function showLog(log) {
-            const logBox = document.getElementById("logs");
-            const div = document.createElement("div");
-            div.innerHTML = `[${log.time}] ${log.message}`;
-            if (log.level === "ERROR") div.style.color = "red";
-            else if (log.level === "SUCCESS") div.style.color = "lightgreen";
-            else if (log.level === "WARN") div.style.color = "orange";
-            logBox.appendChild(div);
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>

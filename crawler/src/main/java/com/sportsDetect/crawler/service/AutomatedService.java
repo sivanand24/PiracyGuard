@@ -1,6 +1,6 @@
 package com.sportsDetect.crawler.service;
 
-import com.sportsDetect.crawler.engine.Validator;
+/*import com.sportsDetect.crawler.engine.Validator;
 import com.sportsDetect.crawler.engine.WebScout;
 import com.sportsDetect.crawler.model.CrawlResult;
 import com.sportsDetect.crawler.model.Media;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AutomatedService {
@@ -52,26 +53,48 @@ public class AutomatedService {
     public void startDynamicCrawl(String query) {
         logService.info("[AUTOMATOR] Starting targeted hunt for: " + query);
 
+        String normalizedQuery = query.toLowerCase().trim();
+
         List<Media> targetMedia = mediaRepository.findAll().stream()
-                .filter(m -> m.getTitle() != null && m.getTitle().equalsIgnoreCase(query))
-                .toList();
+                .filter(m -> m.getTitle() != null &&
+                        m.getTitle().toLowerCase().contains(normalizedQuery))
+                .collect(Collectors.toList());
 
         if (targetMedia.isEmpty()) {
             logService.warn("[AUTOMATOR] No matching media found for: " + query);
             return;
         }
+        logService.success("[AUTOMATOR] Found " + targetMedia.size() + " matches for: " + query);
 
         for (Media media : targetMedia) {
             logService.info("[AUTOMATOR] Scouting for: " + media.getTitle());
 
             for (String engine : searchEngine) {
                 String searchUrl = engine + media.getTitle().replace(" ", "+");
-                Set<String> discoveredLinks = webScout.scanSiteForLinks(searchUrl, media.getTitle());
+                logService.info("[DEBUG] Scouting URL: " + searchUrl);
+                Set<String> discoveredLinks = playwrightCrawlerService.extractLinks(searchUrl, media.getTitle());
+                logService.info("[DEBUG] Found " + discoveredLinks.size() + " links from scout.");
 
                 for (String link : discoveredLinks) {
-                    if (link == null || !link.startsWith("http")) continue;
-                    if (!(link.endsWith(".jpg") || link.endsWith(".png"))) continue;
+                    logService.info("[DEBUG] Attempting to process link: " + link);
 
+                    if (link == null || !link.startsWith("http")) {
+                        logService.info("[DEBUG] REJECTED: Not a valid HTTP link");
+                        continue;
+                    }
+
+                    String lowerLink = link.toLowerCase();
+                    boolean isImage = lowerLink.contains(".jpg") ||
+                            lowerLink.contains(".png") ||
+                            lowerLink.contains(".jpeg");
+
+                    if (!isImage) {
+                        logService.info("[DEBUG] REJECTED: Not an image format");
+                        continue;
+                    }
+
+                    logService.success("[SUCCESS] Filter passed, pushing to Redis: " + link);
+                    redisQueueService.push(link + "|" + media.getId());
                     Set<String> finalLinks = new HashSet<>();
                     finalLinks.add(link);
 
@@ -170,3 +193,5 @@ public class AutomatedService {
             return url.contains("espn") || url.contains("youtube");
         }
     }
+
+ */

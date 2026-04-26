@@ -1,6 +1,5 @@
 package com.sportsDetect.crawler.repository;
 
-import com.sportsDetect.crawler.model.DetectionLog;
 import com.sportsDetect.crawler.model.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

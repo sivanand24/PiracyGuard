@@ -1,6 +1,6 @@
 package com.sportsDetect.crawler.utils;
 
-import org.springframework.stereotype.Component;
+/*import org.springframework.stereotype.Component;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -17,3 +17,4 @@ public class LinkQueue {
         return queue.take();
     }
 }
+*/
