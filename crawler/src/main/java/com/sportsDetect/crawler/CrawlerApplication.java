@@ -12,7 +12,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
 import java.time.LocalDateTime;
 
@@ -26,12 +29,14 @@ public class CrawlerApplication {
 		SpringApplication.run(CrawlerApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner loadTestData(MediaRepository mediaRepository) {
-		return args -> {
-			if (mediaRepository.count() == 0) {
-				System.out.println(" [SYSTEM] Auto-loaded 'Lakers vs Celtics' into the database!");
-			}
-		};
+		@Bean
+		public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
+			http
+					.csrf(csrf -> csrf.disable())
+					.cors(Customizer.withDefaults())
+					.authorizeHttpRequests(auth -> auth
+							.anyRequest().permitAll()
+					);
+			return http.build();
+		}
 	}
-}
