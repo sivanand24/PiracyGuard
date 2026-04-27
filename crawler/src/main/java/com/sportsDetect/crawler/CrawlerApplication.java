@@ -12,15 +12,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import java.time.LocalDateTime;
 
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@Import(SecurityConfig.class)
-@EnableScheduling
 @EnableAsync
-@ComponentScan(basePackages = "com.sportsDetect.crawler")
+@EnableWebSecurity
 public class CrawlerApplication {
 
 	public static void main(String[] args) {
