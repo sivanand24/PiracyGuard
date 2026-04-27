@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "https://piracyguard-production.up.railway.app";
 async function performSearch() {
     const query = document.getElementById("searchInput").value;
     const resultsDiv = document.getElementById("results");
@@ -10,7 +10,7 @@ async function performSearch() {
     resultsWrapper.classList.remove("hidden");
 
     try {
-        const response = await fetch(`http://localhost:8080/api/search?query=${encodeURIComponent(query)}`);
+        const response = await fetch(`${API_BASE_URL}/api/search?query=${encodeURIComponent(query)}`);
         
         if (!response.ok) throw new Error("Search failed");
         
@@ -36,7 +36,7 @@ async function loadDetections() {
     if (!container) return; 
 
     try {
-        const res = await fetch("http://localhost:8080/api/dashboard/detections");
+        const res = await fetch(`${API_BASE_URL}/api/dashboard/detections`);
         if (!res.ok) throw new Error("API not found");
         const data = await res.json();
         
@@ -72,7 +72,7 @@ async function runComparison() {
     if (panel) panel.classList.remove('hidden');
     document.getElementById('resConfidence').innerText = "CALC...";
     try {
-        const response = await fetch(`http://localhost:8080${endpoint}`, {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
             method: 'POST',
             body: formData
         });
@@ -128,7 +128,7 @@ async function handleUpload(action) {
 
         try {
             
-            const response = await fetch('http://localhost:8080/upload/files', {
+            const response = await fetch(`${API_BASE_URL}/upload/files`, {
                 method: 'POST',
                 body: formData
             });
@@ -151,7 +151,7 @@ async function handleUpload(action) {
 
         try {
             
-            const response = await fetch(`http://localhost:8080/upload/verify-video`, {
+            const response = await fetch(`${API_BASE_URL}/upload/verify-video`, {
                 method: 'POST',
                 body: formData 
             });
@@ -185,7 +185,7 @@ const email = type === 'login' ? document.getElementById('loginEmail').value : d
     
 
     try {
-        const response = await fetch(`http://localhost:8080/api/auth/${type}`, {
+        const response = await fetch(`${API_BASE_URL}/api/auth/${type}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload) 
@@ -247,7 +247,7 @@ const email = type === 'login' ? document.getElementById('loginEmail').value : d
     async function loadDatabaseRecords() {
     const listContainer = document.getElementById('db-list');
     try {
-        const response = await fetch('http://localhost:8080/upload/all', {
+        const response = await fetch(`${API_BASE_URL}/upload/all`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('userToken')}` 
             }
@@ -306,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileProtect = document.getElementById('fileProtect');
     const fileVerify = document.getElementById('fileVerify');
 
-    // Listener for the "Protect" side
     if (fileProtect) {
         fileProtect.addEventListener('change', () => {
             const file = fileProtect.files[0];
@@ -318,7 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Listener for the "Verify" side
     if (fileVerify) {
         fileVerify.addEventListener('change', () => {
             const file = fileVerify.files[0];
