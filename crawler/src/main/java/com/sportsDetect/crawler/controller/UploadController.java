@@ -21,7 +21,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/upload")
-@CrossOrigin(origins = "*")
 public class UploadController {
     @Autowired
     private MediaRepository mediaRepository;
