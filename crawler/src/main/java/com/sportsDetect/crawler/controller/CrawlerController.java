@@ -24,6 +24,12 @@ public class CrawlerController {
     @Autowired
     private DiscoveryService discoveryService;
 
+    @GetMapping("/db")
+    public String testDB() {
+        long count = mediaRepository.count();
+        return "DB Connected ✅ | Records: " + count;
+    }
+
 
     @GetMapping("/search")
     public ResponseEntity<List<String>> search(@RequestParam String query) {
