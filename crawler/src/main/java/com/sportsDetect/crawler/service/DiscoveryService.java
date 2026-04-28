@@ -16,7 +16,7 @@ public class DiscoveryService {
     public List<String> findViolations(String query, String site) {
         try {
             String fullQuery = query;
-            String url = "https://piracyguard-production.up.railway.app/api/search?q=" +
+            String url = "https://searx.be/search?q=" +
                     URLEncoder.encode(fullQuery, StandardCharsets.UTF_8) +
                     "&format=json";
 
