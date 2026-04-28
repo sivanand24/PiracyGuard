@@ -1,4 +1,4 @@
-
+const API_BASE_URL = "https://piracyguard-production.up.railway.app";
 async function performSearch() {
     const query = document.getElementById("searchInput").value;
     const resultsDiv = document.getElementById("results");
