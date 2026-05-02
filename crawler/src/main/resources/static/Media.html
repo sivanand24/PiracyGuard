@@ -34,26 +34,29 @@
     </header>
 
     <div class="glass p-8 max-w-5xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            
-            <div class="space-y-4">
-                <label class="text-[10px] uppercase tracking-widest text-indigo-400 font-bold">Source: Official Media</label>
-                <div class="border-2 border-dashed border-slate-800 rounded-2xl p-10 text-center hover:border-indigo-500/40 transition-all cursor-pointer bg-white/5" onclick="document.getElementById('officialFile').click()">
-                    <input type="file" id="officialFile" class="hidden">
-                    <div class="text-2xl mb-2">📄</div>
-                    <p id="officialLabel" class="text-xs text-slate-400">Select official file</p>
-                </div>
-            </div>
-
-            <div class="space-y-4">
-                <label class="text-[10px] uppercase tracking-widest text-red-400 font-bold">Source: Suspect Media</label>
-                <div class="border-2 border-dashed border-slate-800 rounded-2xl p-10 text-center hover:border-red-500/40 transition-all cursor-pointer bg-white/5" onclick="document.getElementById('suspectFile').click()">
-                    <input type="file" id="suspectFile" class="hidden">
-                    <div class="text-2xl mb-2">🕵️</div>
-                    <p id="suspectLabel" class="text-xs text-slate-400">Select suspect file</p>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        
+        <div class="space-y-4">
+            <label class="text-[10px] uppercase tracking-widest text-indigo-400 font-bold">Source: Official Media</label>
+            <div class="border-2 border-dashed border-slate-800 rounded-2xl p-10 text-center hover:border-indigo-500/40 transition-all cursor-pointer bg-white/5" 
+                 onclick="document.getElementById('officialFile').click()">
+                <input type="file" id="officialFile" class="hidden" onchange="updateFileName(this, 'officialLabel')">
+                <div class="text-2xl mb-2">📄</div>
+                <p id="officialLabel" class="text-xs text-slate-400">Select official file</p>
             </div>
         </div>
+
+        <div class="space-y-4">
+            <label class="text-[10px] uppercase tracking-widest text-red-400 font-bold">Source: Suspect Media</label>
+            <div class="border-2 border-dashed border-slate-800 rounded-2xl p-10 text-center hover:border-red-500/40 transition-all cursor-pointer bg-white/5" 
+                 onclick="document.getElementById('suspectFile').click()">
+                <input type="file" id="suspectFile" class="hidden" onchange="updateFileName(this, 'suspectLabel')">
+                <div class="text-2xl mb-2">🕵️</div>
+                <p id="suspectLabel" class="text-xs text-slate-400">Select suspect file</p>
+            </div>
+        </div>
+    </div>
+
 
         <button onclick="runComparison()" class="w-full bg-indigo-600 py-4 rounded-xl font-bold text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all uppercase tracking-widest text-sm">
             Execute Comparison Algorithm

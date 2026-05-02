@@ -1,6 +1,19 @@
 
 const API_BASE_URL = "https://piracyguard-production.up.railway.app";
 
+function updateFileName(input, labelId) {
+    const label = document.getElementById(labelId);
+    if (input.files && input.files.length > 0) {
+        label.innerText = "Selected: " + input.files[0].name;
+        label.classList.remove('text-slate-400');
+        label.classList.add('text-indigo-400', 'font-bold');
+    } else {
+        label.innerText = "Select file";
+        label.classList.add('text-slate-400');
+        label.classList.remove('text-indigo-400', 'font-bold');
+    }
+}
+
 async function performSearch() {
     const query = document.getElementById("searchInput").value;
     const resultsDiv = document.getElementById("results");
