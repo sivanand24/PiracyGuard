@@ -63,9 +63,18 @@ public class UploadController {
                 combinedHash = String.join(",", hashList);
             }
             else {
-                byte[] watermarked = WatermarkUtil.applyInvisibleWatermark(file.getBytes(),fingerprintID);
-                String imagePath = "output/image_" + System.currentTimeMillis() + ".png";
-                Files.write(Path.of(imagePath), watermarked);
+                byte[] watermarked = WatermarkUtil.applyInvisibleWatermark(file.getBytes(), fingerprintID);
+
+                Path outputDirectory = Path.of("output");
+                String filename = "image_" + System.currentTimeMillis() + ".png";
+                Path imagePath = outputDirectory.resolve(filename);
+
+                if (!Files.exists(outputDirectory)) {
+                    Files.createDirectories(outputDirectory);
+                    System.out.println("DEBUG: Created 'output' directory on server.");
+                }
+
+                Files.write(imagePath, watermarked);
 
                 combinedHash = HashUtil.generatePHash(watermarked);
             }
