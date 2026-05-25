@@ -1,5 +1,5 @@
 
-const API_BASE_URL = "https://piracyguard-production.up.railway.app";
+const API_BASE_URL = "https://piracyguard-production-5b1e.up.railway.app";
 
 function updateFileName(input, labelId) {
     const label = document.getElementById(labelId);
