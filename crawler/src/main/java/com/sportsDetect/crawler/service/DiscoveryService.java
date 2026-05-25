@@ -19,7 +19,7 @@ public class DiscoveryService {
     public List<String> findViolations(String query, String site) {
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            String url = "https://searxng-production-aa19.up.railway.app/search?q=" + encodedQuery + "&format=json";
+            String url = "https://searxng-production-fd35.up.railway.app/search?q=" + encodedQuery + "&format=json";
 
             HttpHeaders headers;
             headers = new HttpHeaders();
