@@ -24,10 +24,11 @@ public class DiscoveryService {
             HttpHeaders headers;
             headers = new HttpHeaders();
             headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+            headers.set("Accept", "application/json");
+            headers.set("Accept-Language", "en-US,en;q=0.9");
 
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
-            // Execute the request
             ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, entity, JsonNode.class);
 
             List<String> links = new ArrayList<>();
